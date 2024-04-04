@@ -33,7 +33,12 @@ public class Product {
         counter++;
     }
 
-    public Product(){
+    public Product(String title, String description, float price, int quantity){
+        setId();
+        setTitle(title);
+        setDescription(description);
+        setPrice(price);
+        setQuantity(quantity);
 
     }
 }
