@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor //lonbok
 @ToString
 //@AllArgsConstructor
 public class Product {
