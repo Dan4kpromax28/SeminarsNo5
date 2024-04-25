@@ -12,7 +12,7 @@ import java.util.Arrays;
 @Service
 public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductService {
 
-    private ArrayList<Product> allProducts = new ArrayList<>(Arrays.asList(new Product("Daniels", "Balika", 0.99f,1),new Product("Danis", "Bika", 0.99f,6), new Product("iels", "ika", 0.99f,8)));
+    private ArrayList<Product> allProducts = new ArrayList<>(Arrays.asList(new Product("Daniels", "Balika", 0.99f, 1), new Product("Danis", "Bika", 0.99f, 6), new Product("iels", "ika", 0.99f, 8)));
 
     @Override
 
@@ -124,5 +124,17 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
             }
         }
         return filteredProducts;
+    }
+
+    @Override
+    public float calculateProductsTotalValue() throws Exception {
+        if (allProducts.isEmpty()) {
+            throw new Exception("No products");
+        }
+        float totalValue = 0;
+        for (Product tempP : allProducts) {
+            totalValue += tempP.getPrice() * tempP.getQuantity();
+        }
+        return totalValue;
     }
 }

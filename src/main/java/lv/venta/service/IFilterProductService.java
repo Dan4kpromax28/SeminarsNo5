@@ -11,6 +11,7 @@ public interface IFilterProductService {
     public abstract ArrayList<Product> filterProductByQuantityThreshold(int quantityThreshold) throws Exception;
 
     public abstract ArrayList<Product> filterByTitleDescription(String titleDescription) throws Exception;
+    public abstract float calculateProductsTotalValue() throws Exception;
 
 
 }
