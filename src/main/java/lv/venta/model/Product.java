@@ -11,7 +11,7 @@ public class Product {
     private static long counter = 0;
     private long id;
     @NotNull
-    @Pattern(regexp = "[A-Z]{1}[a-z]+")
+    @Pattern(regexp = "[A-Z]{1}[a-z]+", message = "Only letters and space")
     @Size(min = 3, max = 20)
     private String title;
 

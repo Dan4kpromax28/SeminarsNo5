@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Ludzi ievadiet produktu</p>
+    <form action="#" th:action="@{/product/insert}" th:object="${product}" th:method="post">
+        <table>
+            <tr>
+                <td>Nosaukums</td>
+                <td> <input type="text" th:field="*{title}"  /> </td>
+                <td th:if ="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
+            </tr>
+            <tr>
+                <td>Cena</td>
+                <td> <input type="text" th:field="*{price}"  /> </td>
+                <td th:if ="${#fields.hasErrors('price')}" th:errors="*{price}"></td>
+            </tr>
+            <tr>
+                <td>Daudzums</td>
+                <td> <input type="text" th:field="*{quantity}"  /> </td>
+                <td th:if ="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></td>
+            </tr>
+            <tr>
+                <td>apraksts</td>
+                <td> <input type="text" th:field="*{description}"  /> </td>
+                <td th:if ="${#fields.hasErrors('description')}" th:errors="*{description}"></td>
+            </tr>
+            <tr>
+                <td>Submit</td>
+                <td> <input type="submit"  /> </td>
+            </tr>
+        </table>
+
+    </form>
+
+</body>
+</html>
