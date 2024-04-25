@@ -56,5 +56,18 @@ public class ProductFilterAndStatController {
         }
     }
 
+    @GetMapping("total")
+    public String getProductInfoFilterByTitleOrDescription(Model model) {
+        try {
+           float result = filterService.calculateProductsTotalValue();
+            model.addAttribute("mymsg", "Total: " + result + "eur");
+            return "msg-page";
+
+        } catch (Exception e) {
+            model.addAttribute("msg", e.getMessage());
+            return "error-page";
+        }
+    }
+
 
 }
