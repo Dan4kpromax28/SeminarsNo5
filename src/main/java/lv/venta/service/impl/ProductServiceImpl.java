@@ -76,15 +76,8 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
         if (priceThreshold <= 0 || priceThreshold > 10000) {
             throw new Exception("PriceThreshold should be between 0 and 10000");
         }
-        if (allProducts.isEmpty()) {
-            throw new Exception("Error: there are no products");
-        }
-        ArrayList<Product> filteredProducts = new ArrayList<>();
-        for (Product tempP : allProducts) {
-            if (tempP.getPrice() <= priceThreshold) {
-                filteredProducts.add(tempP);
-            }
-        }
+        ArrayList<Product> filteredProducts = productRepo.findByPriceLessThanEqual(priceThreshold);
+
         return filteredProducts;
     }
 
@@ -93,15 +86,8 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
         if (quantityThreshold <= 0 || quantityThreshold > 10000) {
             throw new Exception("QuantityThreshold should be between 0 and 10000");
         }
-        if (allProducts.isEmpty()) {
-            throw new Exception("Error: there are no products");
-        }
-        ArrayList<Product> filteredProducts = new ArrayList<>();
-        for (Product tempP : allProducts) {
-            if (tempP.getQuantity() <= quantityThreshold) {
-                filteredProducts.add(tempP);
-            }
-        }
+
+        ArrayList<Product> filteredProducts = productRepo.findByQuantityLessThanEqual(quantityThreshold);
         return filteredProducts;
     }
 
@@ -110,15 +96,9 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
         if (titleDescription == null) {
             throw new Exception("titleDescription is null");
         }
-        if (allProducts.isEmpty()) {
-            throw new Exception("Error: there are no products");
-        }
-        ArrayList<Product> filteredProducts = new ArrayList<>();
-        for (Product tempP : allProducts) {
-            if (tempP.getTitle().contains(titleDescription) || tempP.getDescription().contains(titleDescription)) {
-                filteredProducts.add(tempP);
-            }
-        }
+
+        ArrayList<Product> filteredProducts = productRepo.findByTitleLikeIgnoreCaseOrDescriptionLikeIgnoreCase(titleDescription, titleDescription);
+
         return filteredProducts;
     }
 
