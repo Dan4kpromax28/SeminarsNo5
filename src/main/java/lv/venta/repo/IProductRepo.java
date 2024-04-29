@@ -1,6 +1,7 @@
 package lv.venta.repo;
 
 import lv.venta.model.Product;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -16,5 +17,7 @@ public interface IProductRepo extends CrudRepository <Product, Integer> {
     ArrayList<Product> findByQuantityLessThanEqual(int quantityThreshold);
 
 
-    ArrayList<Product> findByTitleLikeIgnoreCaseOrDescriptionLikeIgnoreCase(String titleDescription, String titleDescription1);
+    ArrayList<Product> findByTitleIgnoreCaseContainingOrDescriptionIgnoreCaseContaining(String titleDescription, String titleDescription1);
+    @Query(nativeQuery = true, value = "SELECT SUM(PRICE * QUANTITY) FROM PRODUCT_TABLE")
+    float calculateTotalValueOfDBProducts();
 }

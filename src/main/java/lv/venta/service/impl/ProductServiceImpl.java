@@ -97,20 +97,18 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
             throw new Exception("titleDescription is null");
         }
 
-        ArrayList<Product> filteredProducts = productRepo.findByTitleLikeIgnoreCaseOrDescriptionLikeIgnoreCase(titleDescription, titleDescription);
+        ArrayList<Product> filteredProducts = productRepo.findByTitleIgnoreCaseContainingOrDescriptionIgnoreCaseContaining(titleDescription,titleDescription);
 
         return filteredProducts;
     }
 
     @Override
     public float calculateProductsTotalValue() throws Exception {
-        if (allProducts.isEmpty()) {
+        if (productRepo.count() == 0) {
             throw new Exception("No products");
         }
-        float totalValue = 0;
-        for (Product tempP : allProducts) {
-            totalValue += tempP.getPrice() * tempP.getQuantity();
-        }
+        float totalValue = productRepo.calculateTotalValueOfDBProducts();
+
         return totalValue;
     }
 }
