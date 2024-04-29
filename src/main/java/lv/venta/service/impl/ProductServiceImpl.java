@@ -2,8 +2,10 @@ package lv.venta.service.impl;
 
 import jakarta.validation.constraints.NotNull;
 import lv.venta.model.Product;
+import lv.venta.repo.IProductRepo;
 import lv.venta.service.ICRUDProductSevice;
 import lv.venta.service.IFilterProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,8 +13,8 @@ import java.util.Arrays;
 
 @Service
 public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductService {
-
-    private ArrayList<Product> allProducts = new ArrayList<>(Arrays.asList(new Product("Daniels", "Balika", 0.99f, 1), new Product("Danis", "Bika", 0.99f, 6), new Product("iels", "ika", 0.99f, 8)));
+    @Autowired
+  private IProductRepo productRepo;
 
     @Override
 
@@ -32,46 +34,37 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
 
     @Override
     public ArrayList<Product> retrieveAll() throws Exception {
-        if (allProducts.isEmpty()) {
+        if (productRepo.count() == 0) {
             throw new Exception("Error: there are no products");
         }
-        return allProducts;
+        return (ArrayList<Product>) productRepo.findAll();
     }
 
     @Override
     public Product retrieveById(int id) throws Exception {
-        if (allProducts.isEmpty()) {
-            throw new Exception("Error: there are no products");
-        }
-        for (Product tempP : allProducts) {
-            if (tempP.getId() == id) {
-                return tempP;
-            }
-        }
-        throw new Exception("Error: there are no products");
+       if (id < 0) throw new Exception("Error");
+
+       if (productRepo.existsById(id)){
+           return productRepo.findById(id).get();
+       }
+       throw new Exception("Product with " + id + " does not exist");
     }
 
     @Override
     public void updateById(int id, Product product) throws Exception {
-        if (allProducts.isEmpty()) {
-            throw new Exception("Error: there are no products");
-        }
-        for (Product tempP : allProducts) {
-            if (tempP.getId() == id) {
-                tempP.setTitle(product.getTitle());
-                tempP.setPrice(product.getPrice());
-                tempP.setDescription(product.getDescription());
-                tempP.setQuantity(product.getQuantity());
-                return;
-            }
-        }
-        throw new Exception("Error: there are no products");
+        Product updateProduct = retrieveById(id);
+
+        updateProduct.setTitle(product.getTitle());
+        updateProduct.setPrice(product.getPrice());
+        updateProduct.setDescription(product.getDescription());
+        updateProduct.setQuantity(product.getQuantity());
+        productRepo.save(updateProduct); // notiek Update ari DB limeni
     }
 
     @Override
     public Product deleteById(int id) throws Exception {
         Product product = retrieveById(id);
-        allProducts.remove(product);
+        productRepo.delete(product);
         return product;
     }
 
