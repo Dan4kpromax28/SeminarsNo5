@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Service
 public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductService {
     @Autowired
-  private IProductRepo productRepo;
+    private IProductRepo productRepo;
 
     @Override
 
@@ -22,15 +22,18 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
         if (product == null) {
             throw new Exception("Error: product is null");
         }
-        for (Product tempP : allProducts) {
-            if (tempP.getTitle().equals(product.getTitle()) && tempP.getPrice() == product.getPrice() && tempP.getDescription().equals(product.getDescription())) {
-                tempP.setQuantity(tempP.getQuantity() + product.getQuantity());
-                return tempP;
-
-            }
+        Product productFromDB = productRepo.findByTitleAndDescriptionAndPrice(product.getTitle(), product.getDescription(), product.getPrice());
+        // noskaidrojam vai tads products eksiste
+        if (productFromDB != null) {
+            productFromDB.setQuantity(productFromDB.getQuantity() + product.getQuantity());
+            productRepo.save(productFromDB);
+            return productFromDB;
         }
-        return null;
+
+        Product storedProduct = productRepo.save(product);
+        return storedProduct;
     }
+
 
     @Override
     public ArrayList<Product> retrieveAll() throws Exception {
@@ -42,12 +45,12 @@ public class ProductServiceImpl implements ICRUDProductSevice, IFilterProductSer
 
     @Override
     public Product retrieveById(int id) throws Exception {
-       if (id < 0) throw new Exception("Error");
+        if (id < 0) throw new Exception("Error");
 
-       if (productRepo.existsById(id)){
-           return productRepo.findById(id).get();
-       }
-       throw new Exception("Product with " + id + " does not exist");
+        if (productRepo.existsById(id)) {
+            return productRepo.findById(id).get();
+        }
+        throw new Exception("Product with " + id + " does not exist");
     }
 
     @Override
