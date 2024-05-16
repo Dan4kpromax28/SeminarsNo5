@@ -25,7 +25,7 @@ public class MyAuthority {
     private int ida;
 
     @NotNull
-    @Pattern(regexp = "[A-Z]{1}[a-z]+", message = "Only letters and space")
+    @Pattern(regexp = "[A-Za-z]+", message = "Only letters and space")
     @Size(min = 2, max = 20)
     @Column(name = "Title")
     private String title;
