@@ -70,6 +70,8 @@ public class WebSecurityConfig { // without extends something and this will all 
                 );
 
         http.formLogin(form -> form.permitAll());
+        http.csrf(csrf-> csrf.disable());
+        http.headers(frame-> frame.frameOptions(option->option.disable()));
 
 
         return http.build();
