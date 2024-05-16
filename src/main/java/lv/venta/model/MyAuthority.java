@@ -14,18 +14,16 @@ import java.util.Collection;
 
 @Getter
 @Setter
-@NoArgsConstructor //lonbok
+@NoArgsConstructor 
 @ToString
-//@AllArgsConstructor
 @Table(name = "AuthorityTable")
 @Entity
-
 public class MyAuthority {
     @Column(name = "Ida")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int ida;
-// new
+
     @NotNull
     @Pattern(regexp = "[A-Z]{1}[a-z]+", message = "Only letters and space")
     @Size(min = 2, max = 20)
