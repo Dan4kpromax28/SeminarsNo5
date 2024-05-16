@@ -66,6 +66,7 @@ public class WebSecurityConfig { // without extends something and this will all 
                 .requestMatchers("/product/delete**").hasAuthority("ADMIN")
                 .requestMatchers("/product/info/filter/**").hasAuthority("USER")
                 .requestMatchers("/product/info/total").hasAuthority("ADMIN")
+                .requestMatchers("/h2-console/**").hasAuthority("ADMIN")
                 );
 
         http.formLogin(form -> form.permitAll());
