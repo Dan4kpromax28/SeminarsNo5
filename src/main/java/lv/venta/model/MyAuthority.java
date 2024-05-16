@@ -45,11 +45,11 @@ public class MyAuthority {
 
     public void addUser(MyUser user) {
         if(!users.contains(user))
-        users.add(user);
+            users.add(user);
     }
 
     public void removeUser(MyUser user) {
         if(users.contains(user))
-        users.remove(user);
+            users.remove(user);
     }
 }
