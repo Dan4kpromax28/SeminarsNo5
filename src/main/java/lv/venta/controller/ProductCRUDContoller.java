@@ -5,13 +5,17 @@ import lombok.SneakyThrows;
 import lv.venta.model.Product;
 import lv.venta.service.ICRUDProductSevice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("product")
+import java.util.ArrayList;
+
+@RestController
+@RequestMapping("/product")
 
 public class ProductCRUDContoller {
     @Autowired
@@ -31,27 +35,23 @@ public class ProductCRUDContoller {
     }
 
     @GetMapping("/list") //static
-    public String getProductsList(Model model) {
+    public ResponseEntity getProductsList() {
         try {
-            model.addAttribute("myobjs", crudService.retrieveAll());
-            return "show-product-list";
+            return new ResponseEntity<ArrayList<Product>>(crudService.retrieveAll(), HttpStatus.OK);
         } catch (Exception e) {
-            model.addAttribute("msg", e.getMessage());
-            return "error-page";
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     @GetMapping("/productone") //localhost:8080/productone?id=3
-    public String getProductone(@RequestParam("id") int id, Model model) {
+    public ResponseEntity getProductone(@RequestParam("id") int id) {
         try {
-            model.addAttribute("myobj", crudService.retrieveById(id));
-            return "show-product-page";
-        } catch (Exception e) {
-            model.addAttribute("msg", "Wrong id");
-            return "error-page";
-        }
 
+            return new ResponseEntity<Product>(crudService.retrieveById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/all/{id}")
@@ -65,23 +65,19 @@ public class ProductCRUDContoller {
         }
     }
 
-    @GetMapping("/insert")
-    public String getProductInsert(Model model) { //localhost:8080/product/insert
-        model.addAttribute("product", new Product()); // padodam tuksu produktu kurs bus aizpildits
-        return "insert-product-page"; // tiek paradita lapa kur var ievadit datus
-    }
+
 
     @PostMapping("/insert")   //localhost:8080//product/insert"
-    public String insertProduct(@Valid Product product, BindingResult result) { // iegproductust aizpilditu produktu
+    public ResponseEntity  insertProduct(@RequestBody @Valid Product product, BindingResult result) { // iegproductust aizpilditu produktu
 
         if (result.hasErrors()) {
-            return "insert-product-page";
+            return new ResponseEntity<String>("Problems with params",HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             try {
                 crudService.crateProduct(product);
-                return "redirect:/product/list";
+                return new ResponseEntity(HttpStatus.OK);
             } catch (Exception e) {
-                return "redirect:/error";
+                return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
